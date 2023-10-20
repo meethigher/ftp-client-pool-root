@@ -12,6 +12,7 @@
         <module>ftp-client-pool</module>
         <module>spring-boot-starter-ftp-client-pool</module>
     </modules>
+    <name>ftp-client-pool-root</name>
     <description>Lightweight FTPClient Connection Pool</description>
     <url>https://github.com/meethigher/ftp-client-pool-root</url>
     <licenses>
