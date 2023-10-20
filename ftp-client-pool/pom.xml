@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>ftp-client-pool</artifactId>
+    <name>ftp-client-pool</name>
     <description>Lightweight FTPClient Connection Pool</description>
     <dependencies>
 

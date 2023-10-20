@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>spring-boot-starter-ftp-client-pool</artifactId>
+    <name>spring-boot-starter-ftp-client-pool</name>
     <description>SpringBoot Starter For Lightweight FTPClient Connection Pool</description>
 
     <dependencies>
