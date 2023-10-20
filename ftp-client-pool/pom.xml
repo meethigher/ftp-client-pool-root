@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>top.meethigher</groupId>
+        <artifactId>ftp-client-pool-root</artifactId>
+        <version>1.0</version>
+    </parent>
+
+    <artifactId>ftp-client-pool</artifactId>
+    <description>Lightweight FTPClient Connection Pool</description>
+    <dependencies>
+
+        <!--Apache Commons Net是一个开源的Java网络通信库，可以用于创建网络客户端和服务器，支持常见的网络协议，如FTP、SMTP、POP3、IMAP、HTTP等，以及Socket编程。-->
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>${project.commons-net.version}</version>
+        </dependency>
+
+        <!--Apache Commons Pool 2是一个开源的Java对象池库，用于管理和复用对象实例，以减少对象的创建和销毁开销，提高应用程序的性能和资源利用率。-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+            <version>${project.commons-pool2.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${project.logback-classic.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${project.lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
+</project>

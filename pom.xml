@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>top.meethigher</groupId>
+    <artifactId>ftp-client-pool-root</artifactId>
+    <version>1.0</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>ftp-client-pool</module>
+        <module>spring-boot-starter-ftp-client-pool</module>
+    </modules>
+    <description>Lightweight FTPClient Connection Pool</description>
+    <url>https://github.com/meethigher/ftp-client-pool-root</url>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+    <scm>
+        <url>https://github.com/meethigher/ftp-client-pool-root</url>
+        <connection>https://github.com/meethigher/ftp-client-pool-root.git</connection>
+    </scm>
+
+
+    <properties>
+        <java.version>8</java.version>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <project.lombok.version>1.18.22</project.lombok.version>
+        <project.commons-net.version>3.9.0</project.commons-net.version>
+        <project.commons-pool2.version>2.11.1</project.commons-pool2.version>
+        <project.logback-classic.version>1.2.12</project.logback-classic.version>
+        <project.spring-boot.version>2.5.14</project.spring-boot.version>
+    </properties>
+
+    <!--开发者信息-->
+    <developers>
+        <developer>
+            <name>meethigher</name>
+            <id>meethigher</id>
+            <email>meethigher@qq.com</email>
+            <url>https://meethigher.top</url>
+            <organizationUrl>https://github.com/meethigher</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <timezone>+8</timezone>
+        </developer>
+    </developers>
+
+
+</project>
