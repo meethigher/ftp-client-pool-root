@@ -77,10 +77,10 @@ developers do not need to worry about the operations of obtaining and returning 
 public static void example2() throws Exception {
     FTPClientPool pool = new FTPClientPool(new FTPClientFactory(getPoolConfig()));
     FTPAutoReleaser autoReleaser = new FTPAutoReleaser(pool);
-    Integer total = autoReleaser.execute(ftpClient -> {
+    Optional<Integer> optional = autoReleaser.execute(ftpClient -> {
         FTPFile[] ftpFiles = ftpClient.listFiles("/");
         System.out.printf("连接池： %n numActive: %s %n numIdle: %s %n", pool.getNumActive(), pool.getNumIdle());
-        return ftpFiles.length;
+        return Optional.of(ftpFiles.length);
     });
     System.out.printf("连接池： %n numActive: %s %n numIdle: %s %n", pool.getNumActive(), pool.getNumIdle());
 }
@@ -107,6 +107,16 @@ logging.level.top.meethigher.ftp.client.pool=debug
 this time you only need to inject the object and you can use it.
 
 ```java
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.stereotype.Component;
+import top.meethigher.ftp.client.pool.FTPClientPool;
+import top.meethigher.ftp.client.pool.utils.FTPAutoReleaser;
+
+import javax.annotation.Resource;
+import java.util.Optional;
+
 @SpringBootApplication
 public class TempDemoApplication {
     @Component
@@ -115,12 +125,14 @@ public class TempDemoApplication {
         private FTPClientPool ftpClientPool;
         @Resource
         private FTPAutoReleaser ftpAutoReleaser;
+
         @Override
         public void run(String... args) throws Exception {
-            Integer total = ftpAutoReleaser.execute(FTP::list);
-            System.out.println(total);
+            Optional<Integer> optional = ftpAutoReleaser.execute(client -> Optional.of(client.list()));
+            optional.ifPresent(System.out::println);
         }
     }
+
     public static void main(String[] args) {
         SpringApplication.run(TempDemoApplication.class, args);
     }

@@ -3,6 +3,8 @@ package top.meethigher.ftp.client.pool.utils;
 import org.apache.commons.net.ftp.FTPClient;
 import top.meethigher.ftp.client.pool.FTPClientPool;
 
+import java.util.Optional;
+
 /**
  * FTP自动归还连接
  *
@@ -21,7 +23,7 @@ public class FTPAutoReleaser {
         this.pool = pool;
     }
 
-    public <T> T execute(FTPHandler<T> handler) throws Exception {
+    public <T> Optional<T> execute(FTPHandler<T> handler) throws Exception {
         FTPClient ftpClient = null;
         try {
             ftpClient = pool.borrowObject();

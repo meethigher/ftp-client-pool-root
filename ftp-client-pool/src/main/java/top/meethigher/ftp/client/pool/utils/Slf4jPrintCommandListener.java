@@ -24,7 +24,7 @@ public class Slf4jPrintCommandListener implements ProtocolCommandListener {
      * @param log where to write the commands and responses
      */
     public Slf4jPrintCommandListener(final Logger log) {
-        this(log, false, (char) 0);
+        this(log, true, (char) 0);
     }
 
 
@@ -63,11 +63,9 @@ public class Slf4jPrintCommandListener implements ProtocolCommandListener {
         }
         final int pos = msg.indexOf(SocketClient.NETASCII_EOL);
         if (pos > 0) {
-            final StringBuilder sb = new StringBuilder();
-            sb.append(msg.substring(0, pos));
-            sb.append(eolMarker);
-            sb.append(msg.substring(pos));
-            return sb.toString();
+            return msg.substring(0, pos) +
+                    eolMarker +
+                    msg.substring(pos);
         }
         return msg;
     }
@@ -75,6 +73,7 @@ public class Slf4jPrintCommandListener implements ProtocolCommandListener {
     @Override
     public void protocolCommandSent(final ProtocolCommandEvent event) {
         StringBuilder sb = new StringBuilder();
+        sb.append(event.getSource().toString()).append(" sent: ");
         if (directionMarker) {
             sb.append("> ");
         }
@@ -82,14 +81,14 @@ public class Slf4jPrintCommandListener implements ProtocolCommandListener {
             final String cmd = event.getCommand();
             if ("PASS".equalsIgnoreCase(cmd) || "USER".equalsIgnoreCase(cmd)) {
                 sb.append(cmd);
-                log.debug(" *******"); // Don't bother with EOL marker for this!
+                sb.append(" *******"); // Don't bother with EOL marker for this!
             } else {
                 final String IMAP_LOGIN = "LOGIN";
                 if (IMAP_LOGIN.equalsIgnoreCase(cmd)) { // IMAP
                     String msg = event.getMessage();
                     msg = msg.substring(0, msg.indexOf(IMAP_LOGIN) + IMAP_LOGIN.length());
                     sb.append(msg);
-                    log.debug(" *******"); // Don't bother with EOL marker for this!
+                    sb.append(" *******"); // Don't bother with EOL marker for this!
                 } else {
                     sb.append(getPrintableString(event.getMessage()));
                 }
@@ -103,6 +102,7 @@ public class Slf4jPrintCommandListener implements ProtocolCommandListener {
     @Override
     public void protocolReplyReceived(final ProtocolCommandEvent event) {
         StringBuilder sb = new StringBuilder();
+        sb.append(event.getSource().toString()).append(" received: ");
         if (directionMarker) {
             sb.append("< ");
         }
