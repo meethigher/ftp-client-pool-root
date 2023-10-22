@@ -75,6 +75,11 @@ public class FTPPoolConfig extends GenericObjectPoolConfig<FTPClient> {
      */
     private long dataTimeoutMills = -1;
 
+    /**
+     * Slf4j日志调试
+     */
+    private boolean debug = false;
+
 
     public String getHost() {
         return host;
@@ -170,5 +175,13 @@ public class FTPPoolConfig extends GenericObjectPoolConfig<FTPClient> {
 
     public void setDataTimeoutMills(long dataTimeoutMills) {
         this.dataTimeoutMills = dataTimeoutMills;
+    }
+
+    public boolean isDebug() {
+        return debug;
+    }
+
+    public void setDebug(boolean debug) {
+        this.debug = debug;
     }
 }

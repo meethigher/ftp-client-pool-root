@@ -6,7 +6,7 @@
 
     <groupId>top.meethigher</groupId>
     <artifactId>ftp-client-pool-root</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <packaging>pom</packaging>
     <modules>
         <module>ftp-client-pool</module>
@@ -33,6 +33,7 @@
         <java.version>8</java.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <project.root.version>1.1</project.root.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.lombok.version>1.18.22</project.lombok.version>
@@ -41,6 +42,59 @@
         <project.logback-classic.version>1.2.12</project.logback-classic.version>
         <project.spring-boot.version>2.5.14</project.spring-boot.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!--Apache Commons Net是一个开源的Java网络通信库，可以用于创建网络客户端和服务器，支持常见的网络协议，如FTP、SMTP、POP3、IMAP、HTTP等，以及Socket编程。-->
+            <dependency>
+                <groupId>commons-net</groupId>
+                <artifactId>commons-net</artifactId>
+                <version>${project.commons-net.version}</version>
+            </dependency>
+
+            <!--Apache Commons Pool 2是一个开源的Java对象池库，用于管理和复用对象实例，以减少对象的创建和销毁开销，提高应用程序的性能和资源利用率。-->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-pool2</artifactId>
+                <version>${project.commons-pool2.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${project.logback-classic.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${project.lombok.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>top.meethigher</groupId>
+                <artifactId>ftp-client-pool</artifactId>
+                <version>${project.root.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>top.meethigher</groupId>
+                <artifactId>spring-boot-starter-ftp-client-pool</artifactId>
+                <version>${project.root.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-autoconfigure</artifactId>
+                <version>${project.spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-configuration-processor</artifactId>
+                <version>${project.spring-boot.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <!--开发者信息-->
     <developers>
@@ -56,6 +110,38 @@
             <timezone>+8</timezone>
         </developer>
     </developers>
+
+    <build>
+        <!--配置插件-->
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 
     <!--分发远程仓库-->

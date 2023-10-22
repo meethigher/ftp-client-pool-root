@@ -6,7 +6,7 @@
     <parent>
         <groupId>top.meethigher</groupId>
         <artifactId>ftp-client-pool-root</artifactId>
-        <version>1.0</version>
+        <version>1.1</version>
     </parent>
 
     <artifactId>ftp-client-pool</artifactId>
@@ -18,26 +18,23 @@
         <dependency>
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
-            <version>${project.commons-net.version}</version>
         </dependency>
 
         <!--Apache Commons Pool 2是一个开源的Java对象池库，用于管理和复用对象实例，以减少对象的创建和销毁开销，提高应用程序的性能和资源利用率。-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
-            <version>${project.commons-pool2.version}</version>
         </dependency>
 
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>${project.logback-classic.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>${project.lombok.version}</version>
             <scope>provided</scope>
         </dependency>
 
