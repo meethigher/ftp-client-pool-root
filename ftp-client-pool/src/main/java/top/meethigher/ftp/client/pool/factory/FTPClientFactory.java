@@ -8,6 +8,7 @@ import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.meethigher.ftp.client.pool.config.FTPPoolConfig;
+import top.meethigher.ftp.client.pool.utils.Slf4jPrintCommandListener;
 
 import java.time.Duration;
 
@@ -35,33 +36,37 @@ public class FTPClientFactory extends BasePooledObjectFactory<FTPClient> {
     @Override
     public FTPClient create() throws Exception {
         FTPClient ftpClient = new FTPClient();
-        ftpClient.setConnectTimeout(poolConfig.getConnectTimeoutMills());
+        if (getPoolConfig().isDebug()) {
+            //ftpClient.addProtocolCommandListener(new org.apache.commons.net.PrintCommandListener(System.out));
+            ftpClient.addProtocolCommandListener(new Slf4jPrintCommandListener(log));
+        }
+        ftpClient.setConnectTimeout(getPoolConfig().getConnectTimeoutMills());
         try {
-            ftpClient.connect(poolConfig.getHost(), poolConfig.getPort());
+            ftpClient.connect(getPoolConfig().getHost(), getPoolConfig().getPort());
         } catch (Exception e) {
             log.error("{} {}", ftpClient, e.getMessage());
         }
         int reply = ftpClient.getReplyCode();
         if (!FTPReply.isPositiveCompletion(reply)) {
             ftpClient.disconnect();
-            log.error("{} failed to connect to the FTPServer {}:{}", ftpClient, poolConfig.getHost(), poolConfig.getPort());
+            log.error("{} failed to connect to the FTPServer {}:{}", ftpClient, getPoolConfig().getHost(), getPoolConfig().getPort());
             return null;
         } else {
-            log.info("{} successfully connected to the FTPServer {}:{}", ftpClient, poolConfig.getHost(), poolConfig.getPort());
+            log.info("{} successfully connected to the FTPServer {}:{}", ftpClient, getPoolConfig().getHost(), getPoolConfig().getPort());
         }
-        boolean result = ftpClient.login(poolConfig.getUsername(), poolConfig.getPassword());
+        boolean result = ftpClient.login(getPoolConfig().getUsername(), getPoolConfig().getPassword());
         if (!result) {
-            String message = ftpClient + " login failed! userName:" + poolConfig.getUsername() + ", password:"
-                    + poolConfig.getPassword();
+            String message = ftpClient + " login failed! userName:" + getPoolConfig().getUsername() + ", password:"
+                    + getPoolConfig().getPassword();
             log.error(message);
             throw new Exception(message);
         }
-        ftpClient.setControlEncoding(poolConfig.getControlEncoding());
-        ftpClient.setBufferSize(poolConfig.getBufferSize());
-        ftpClient.setFileType(poolConfig.getFileType());
-        ftpClient.setDataTimeout(Duration.ofMillis(poolConfig.getDataTimeoutMills()));
-        ftpClient.setUseEPSVwithIPv4(poolConfig.isUseEPSVWithIPv4());
-        if (poolConfig.isPassiveMode()) {
+        ftpClient.setControlEncoding(getPoolConfig().getControlEncoding());
+        ftpClient.setBufferSize(getPoolConfig().getBufferSize());
+        ftpClient.setFileType(getPoolConfig().getFileType());
+        ftpClient.setDataTimeout(Duration.ofMillis(getPoolConfig().getDataTimeoutMills()));
+        ftpClient.setUseEPSVwithIPv4(getPoolConfig().isUseEPSVWithIPv4());
+        if (getPoolConfig().isPassiveMode()) {
             log.info("{} enter local passive mode", ftpClient);
             //进入本地被动模式
             ftpClient.enterLocalPassiveMode();
