@@ -6,7 +6,7 @@
 
     <groupId>top.meethigher</groupId>
     <artifactId>ftp-client-pool-root</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
     <packaging>pom</packaging>
     <modules>
         <module>ftp-client-pool</module>
@@ -33,7 +33,7 @@
         <java.version>8</java.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <project.root.version>1.1</project.root.version>
+        <project.root.version>1.2</project.root.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.lombok.version>1.18.22</project.lombok.version>

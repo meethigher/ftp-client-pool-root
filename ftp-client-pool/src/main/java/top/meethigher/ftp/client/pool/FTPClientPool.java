@@ -37,5 +37,12 @@ public class FTPClientPool extends GenericObjectPool<FTPClient> {
         //当然，也可以手动写任务调用this.evict()方法，进行释放
         this.setTimeBetweenEvictionRuns(Duration.ofMillis(this.factory.getPoolConfig().getPoolEvictIntervalMills()));
         this.setTestWhileIdle(true);
+        log.info("{} - Start completed.", factory.getPoolConfig().getPoolName());
+    }
+
+    @Override
+    public void close() {
+        super.close();
+        log.info("{} - Shutdown completed.", factory.getPoolConfig().getPoolName());
     }
 }

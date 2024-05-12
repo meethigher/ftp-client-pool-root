@@ -6,12 +6,16 @@
     <parent>
         <groupId>top.meethigher</groupId>
         <artifactId>ftp-client-pool-root</artifactId>
-        <version>1.1</version>
+        <version>1.2</version>
     </parent>
 
     <artifactId>spring-boot-starter-ftp-client-pool</artifactId>
     <name>spring-boot-starter-ftp-client-pool</name>
     <description>SpringBoot Starter For Lightweight FTPClient Connection Pool</description>
+
+    <properties>
+        <commons-pool2.version>2.11.1</commons-pool2.version>
+    </properties>
 
     <dependencies>
         <dependency>
