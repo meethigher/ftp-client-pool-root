@@ -12,18 +12,19 @@ import top.meethigher.ftp.client.pool.utils.Slf4jPrintCommandListener;
 
 import java.time.Duration;
 
+
 /**
  * FTPClient工厂
- * 参考自https://github.com/XiaZengming/FtpClientPool
  *
- * @author chenchuancheng
+ * @author <a href="https://meethigher.top">chenchuancheng</a>
+ * @see <a href="https://github.com/XiaZengming/FtpClientPool">XiaZengming/FtpClientPool</a>
  * @since 2023/10/21 03:01
  */
 public class FTPClientFactory extends BasePooledObjectFactory<FTPClient> {
 
-    private static final Logger log = LoggerFactory.getLogger(FTPClientFactory.class);
+    protected static final Logger log = LoggerFactory.getLogger(FTPClientFactory.class);
 
-    private final FTPPoolConfig poolConfig;
+    protected final FTPPoolConfig poolConfig;
 
     public FTPClientFactory(FTPPoolConfig config) {
         this.poolConfig = config;
@@ -33,31 +34,30 @@ public class FTPClientFactory extends BasePooledObjectFactory<FTPClient> {
         return poolConfig;
     }
 
+    /**
+     * 创建client比较耗时，在并发时，需要保证client的创建支持原子性，否则会出现大量连接被创建，进而导致池连接出现问题
+     */
     @Override
-    public FTPClient create() throws Exception {
+    public synchronized FTPClient create() throws Exception {
+        long startMills = System.currentTimeMillis();
         FTPClient ftpClient = new FTPClient();
         if (getPoolConfig().isDebug()) {
             //ftpClient.addProtocolCommandListener(new org.apache.commons.net.PrintCommandListener(System.out));
+            // 使用自己封装的日志Slf4j实现
             ftpClient.addProtocolCommandListener(new Slf4jPrintCommandListener(log));
         }
         ftpClient.setConnectTimeout(getPoolConfig().getConnectTimeoutMills());
-        try {
-            ftpClient.connect(getPoolConfig().getHost(), getPoolConfig().getPort());
-        } catch (Exception e) {
-            log.error("{} {}", ftpClient, e.getMessage());
-        }
+        ftpClient.connect(getPoolConfig().getHost(), getPoolConfig().getPort());
         int reply = ftpClient.getReplyCode();
         if (!FTPReply.isPositiveCompletion(reply)) {
             ftpClient.disconnect();
-            log.error("{} failed to connect to the FTPServer {}:{}", ftpClient, getPoolConfig().getHost(), getPoolConfig().getPort());
-            return null;
-        } else {
-            log.info("{} successfully connected to the FTPServer {}:{}", ftpClient, getPoolConfig().getHost(), getPoolConfig().getPort());
+            throw new Exception("Received FTP response " + reply + " on create.");
         }
         boolean result = ftpClient.login(getPoolConfig().getUsername(), getPoolConfig().getPassword());
         if (!result) {
             String message = ftpClient + " login failed! userName:" + getPoolConfig().getUsername() + ", password:"
                     + getPoolConfig().getPassword();
+            ftpClient.disconnect();
             log.error(message);
             throw new Exception(message);
         }
@@ -67,14 +67,13 @@ public class FTPClientFactory extends BasePooledObjectFactory<FTPClient> {
         ftpClient.setDataTimeout(Duration.ofMillis(getPoolConfig().getDataTimeoutMills()));
         ftpClient.setUseEPSVwithIPv4(getPoolConfig().isUseEPSVWithIPv4());
         if (getPoolConfig().isPassiveMode()) {
-            log.info("{} enter local passive mode", ftpClient);
             //进入本地被动模式
             ftpClient.enterLocalPassiveMode();
         } else {
-            log.info("{} enter local active mode", ftpClient);
             //进入本地主动模式
             ftpClient.enterLocalActiveMode();
         }
+        log.info("{} to be created consumed {} mills, enter local {} mode.", ftpClient, System.currentTimeMillis() - startMills, getPoolConfig().isPassiveMode() ? "passive" : "active");
         return ftpClient;
     }
 
@@ -85,7 +84,8 @@ public class FTPClientFactory extends BasePooledObjectFactory<FTPClient> {
 
     @Override
     public void destroyObject(PooledObject<FTPClient> p) throws Exception {
-        p.getObject().logout();
+        // 此处需要区分logout与disconnect的关系。
+        p.getObject().disconnect();
     }
 
     /**
@@ -99,7 +99,6 @@ public class FTPClientFactory extends BasePooledObjectFactory<FTPClient> {
             if (ftpClient != null) {
                 connected = ftpClient.sendNoOp();
             }
-            //log.info("{} current connection status：{}", ftpClient, connected);
         } catch (Exception e) {
             log.error("{} validateObject error: {}", ftpClient, e.getMessage());
         }

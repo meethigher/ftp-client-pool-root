@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 /**
  * 接入Slf4j的日志模块
  *
- * @author chenchuancheng
+ * @author <a href="https://meethigher.top">chenchuancheng</a>
  * @since 2023/10/22 21:34
  */
 public class Slf4jPrintCommandListener implements ProtocolCommandListener {

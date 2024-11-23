@@ -7,19 +7,19 @@ import org.slf4j.LoggerFactory;
 import top.meethigher.ftp.client.pool.config.FTPPoolConfig;
 import top.meethigher.ftp.client.pool.factory.FTPClientFactory;
 
-import java.time.Duration;
 
 /**
  * FTPClient连接池
  *
- * @author chenchuancheng
+ * @author <a href="https://meethigher.top">chenchuancheng</a>
+ * @see <a href="https://github.com/XiaZengming/FtpClientPool">XiaZengming/FtpClientPool</a>
  * @since 2023/10/21 03:02
  */
 public class FTPClientPool extends GenericObjectPool<FTPClient> {
 
-    private static final Logger log = LoggerFactory.getLogger(FTPClientPool.class);
+    protected static final Logger log = LoggerFactory.getLogger(FTPClientPool.class);
 
-    private final FTPClientFactory factory;
+    protected final FTPClientFactory factory;
 
     @Override
     public FTPClientFactory getFactory() {
@@ -30,14 +30,22 @@ public class FTPClientPool extends GenericObjectPool<FTPClient> {
         return factory.getPoolConfig();
     }
 
-    public FTPClientPool(FTPClientFactory ftpClientFactory) {
+    public FTPClientPool(FTPClientFactory ftpClientFactory, boolean lazy) {
         super(ftpClientFactory, ftpClientFactory.getPoolConfig());
         this.factory = ftpClientFactory;
-        //启用空闲监测, 每隔60秒进行空闲连接监测。通过工厂validateObject进行验证，如果验证失败，则从池中移除
-        //当然，也可以手动写任务调用this.evict()方法，进行释放
-        this.setTimeBetweenEvictionRuns(Duration.ofMillis(this.factory.getPoolConfig().getPoolEvictIntervalMills()));
-        this.setTestWhileIdle(true);
+        if (!lazy) {
+            try {
+                // 急加载，立即初始化连接数量到minIdle
+                this.preparePool();
+            } catch (Exception e) {
+                log.error("preparePool error", e);
+            }
+        }
         log.info("{} - Start completed.", factory.getPoolConfig().getPoolName());
+    }
+
+    public FTPClientPool(FTPClientFactory ftpClientFactory) {
+        this(ftpClientFactory, true);
     }
 
     @Override

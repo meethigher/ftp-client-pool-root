@@ -9,11 +9,12 @@ import org.slf4j.LoggerFactory;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ThreadLocalRandom;
 
+
 /**
  * FTPPool配置
- * 参考自https://github.com/XiaZengming/FtpClientPool
  *
- * @author chenchuancheng
+ * @author <a href="https://meethigher.top">chenchuancheng</a>
+ * @see <a href="https://github.com/XiaZengming/FtpClientPool">XiaZengming/FtpClientPool</a>
  * @since 2023/10/21 03:56
  */
 public class FTPPoolConfig extends GenericObjectPoolConfig<FTPClient> {
@@ -59,6 +60,14 @@ public class FTPPoolConfig extends GenericObjectPoolConfig<FTPClient> {
 
     /**
      * 设置是否将 EPSV 与 IPv4 一起使用。
+     * EPSV为扩展被动模式。
+     * <p>
+     * 默认行为
+     * 在 IPv6 环境下，FTPClient 始终使用 EPSV 模式。
+     * 在 IPv4 环境下，FTPClient 默认使用 PASV 模式。
+     * <p>
+     * 当调用 setUseEPSVwithIPv4(true) 时，FTPClient 会在 IPv4 环境下尝试使用 EPSV 模式进行数据连接。
+     * 如果服务器不支持 EPSV 模式，则会回退到 PASV 模式。
      */
     private boolean useEPSVWithIPv4;
 
@@ -105,6 +114,10 @@ public class FTPPoolConfig extends GenericObjectPoolConfig<FTPClient> {
         this.dataTimeoutMills = -1;
         this.debug = true;
         this.poolName = generatePoolName();
+        /**
+         * JMX 是一种 Java 技术， 允许开发者在运行时进行监控。开启后使用JConsole连接进程即可查看。
+         * 注意：在springboot中，若出现MXBean already registered，启动类添加@EnableMBeanExport(registration = RegistrationPolicy.IGNORE_EXISTING)
+         */
         this.setJmxEnabled(false);
     }
 

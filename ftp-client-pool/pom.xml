@@ -6,35 +6,28 @@
     <parent>
         <groupId>top.meethigher</groupId>
         <artifactId>ftp-client-pool-root</artifactId>
-        <version>1.2</version>
+        <version>1.2.1</version>
     </parent>
 
     <artifactId>ftp-client-pool</artifactId>
     <name>ftp-client-pool</name>
     <description>Lightweight FTPClient Connection Pool</description>
     <dependencies>
-
-        <!--Apache Commons Net是一个开源的Java网络通信库，可以用于创建网络客户端和服务器，支持常见的网络协议，如FTP、SMTP、POP3、IMAP、HTTP等，以及Socket编程。-->
         <dependency>
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
+            <scope>provided</scope>
         </dependency>
 
-        <!--Apache Commons Pool 2是一个开源的Java对象池库，用于管理和复用对象实例，以减少对象的创建和销毁开销，提高应用程序的性能和资源利用率。-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
 

@@ -6,10 +6,11 @@ import top.meethigher.ftp.client.pool.FTPClientPool;
 import java.time.Duration;
 import java.util.Optional;
 
+
 /**
  * FTP自动归还连接
  *
- * @author chenchuancheng
+ * @author <a href="https://meethigher.top">chenchuancheng</a>
  * @since 2023/10/20 10:56
  */
 public class FTPAutoReleaser {
