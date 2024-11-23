@@ -25,7 +25,7 @@ this project refers to the following open source projects
 <dependency>
     <groupId>top.meethigher</groupId>
     <artifactId>ftp-client-pool</artifactId>
-    <version>1.1</version>
+    <version>1.2.1</version>
 </dependency>
 ```
 
@@ -35,20 +35,20 @@ If you are a springboot project
 <dependency>
     <groupId>top.meethigher</groupId>
     <artifactId>spring-boot-starter-ftp-client-pool</artifactId>
-    <version>1.1</version>
+    <version>1.2.1</version>
 </dependency>
 ```
 
 ## Gradle
 
 ```
-implementation 'top.meethigher:ftp-client-pool:1.1'
+implementation 'top.meethigher:ftp-client-pool:1.2.1'
 ```
 
 If you are a springboot project
 
 ```
-implementation 'top.meethigher:spring-boot-starter-ftp-client-pool:1.1'
+implementation 'top.meethigher:spring-boot-starter-ftp-client-pool:1.2.1'
 ```
 
 # Doc
